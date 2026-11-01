@@ -1,7 +1,9 @@
 # gold-atlas-maps
 
-Plat book map tiles for the Old Ground app (benf05ter/gold-atlas), served by GitHub Pages at
+Plat book and old-map overlay tiles for the Old Ground app (benf05ter/gold-atlas), served by GitHub Pages at
 https://benf05ter.github.io/gold-atlas-maps/ot/<layer>/<z>/<x>_<y>.webp
 
 They were moved out of the app repo on 2026-10-30 to keep it under the 1 GB Pages limit. The tile index (ot/index.json) stays in the app repo.
 New plat layers: tile with gold-atlas/tools/tiles/tiler.py, then copy ot/<layer>/ here.
+
+2026-11-01: ot/o15 (USGS 15-minute topos 1927-52) and ot/bd (Wisconsin Land Economic Inventory / Bordner survey 1930s-40s) moved here from the app repo too.
