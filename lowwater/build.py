@@ -9,7 +9,7 @@ Rivers: today's flow (cfs) against every daily mean from 1991 on within a week e
 Lakes:  the Great Lakes have no real tide (a lunar tide of about an inch). What moves the shoreline is
         (1) the seasonal and year-to-year level, scored as the last 30 days' mean against every monthly
         mean for this month since 1991, and (2) wind setdown and seiches, a drop of a foot or more for a
-        few hours when a strong wind pushes water off one shore. Setdown = last hour minus 30-day mean.
+        few hours when a strong wind pushes water off one shore. Setdown = last hour minus the 7-day median.
 
 usage: build.py <data-dir>     (data-dir holds stats.json cache and the previous lowwater.json)
 Stdlib only, so it runs on a bare GitHub Actions runner.
@@ -104,6 +104,17 @@ def band(pct):
     if pct <= 75:
         return 'norm'
     return 'high'
+
+
+def age_days(t):
+    """Days since an ISO time or date (999 if missing or unreadable)."""
+    try:
+        d = dt.datetime.fromisoformat(str(t).replace('Z', '+00:00'))
+        if d.tzinfo is None:
+            d = d.replace(tzinfo=dt.timezone.utc)
+        return (NOW - d).total_seconds() / 86400
+    except Exception:
+        return 999
 
 
 def r1(x, n=1):
@@ -308,7 +319,9 @@ def main():
         st = stats.get(key)
         dv = r.get('dv') or []
         q = r.get('q')
-        if q is None and dv:
+        if q is not None and age_days(r.get('qd')) > 3:
+            q = None
+        if q is None and dv and age_days(dv[-1][0]) <= 3:
             q, r['qd'] = dv[-1][1], dv[-1][0]
         if q is None or not st or not st['q'][today] or r.get('la') is None:
             missing.append(s)
@@ -347,24 +360,24 @@ def main():
         except Exception as e:
             log('recent failed', stn, e)
             pts = []
-        if len(pts) < 100:
+        if len(pts) < 100 or age_days(pts[-1][0].replace(' ', 'T')) > 3:
             missing.append(stn)
             continue
         vals = [v for _, v in pts]
         mean30 = sum(vals) / len(vals)
         last1 = sum(vals[-10:]) / len(vals[-10:])
-        day = vals[-240:]
-        lo24 = min(day)
+        base = sorted(vals[-1680:])[len(vals[-1680:]) // 2]      # 7-day median: the level without the wind
+        lo24 = min(vals[-240:])
         hist = st['by'].get(str(NOW.month)) or st['by'].get(NOW.month) or []
         pct = pct_rank(mean30, hist)
-        setd = last1 - mean30
+        setd = last1 - base
         b = band(pct)
         if setd <= -0.5 and b in ('norm', 'blow', 'high', 'na'):
             b = 'low'
         out.append({'id': stn, 'k': 'l', 'n': st.get('n') or stn, 'w': 'Lake ' + lake, 'la': st['la'], 'lo': st['lo'],
                     'v': round(last1, 2), 'u': 'ft', 'datum': st['datum'], 'd': pts[-1][0].replace(' ', 'T') + 'Z',
                     'm30': round(mean30, 2), 'pct': r1(pct), 'b': b, 'set': round(setd, 2),
-                    'lo24': round(lo24 - mean30, 2), 'mlow': r1(min(hist), 2) if hist else None,
+                    'lo24': round(lo24 - base, 2), 'mlow': r1(min(hist), 2) if hist else None,
                     'mmed': r1(quant(sorted(hist), 50), 2) if hist else None, 'yrs': len(hist)})
 
     # alerts: a gauge at or below the 10th percentile for the date, or a lake set down half a foot or more
@@ -382,7 +395,7 @@ def main():
     res = {'v': 1, 'asof': NOW.isoformat(timespec='minutes'), 'sites': out, 'alerts': alerts, 'missing': missing,
            'about': 'River pct: today\'s flow against every daily mean since 1991 within a week of this date. '
                     'Lake pct: last 30 days\' mean level against every monthly mean for this month since 1991. '
-                    'set = last hour minus 30-day mean (wind setdown or seiche), feet. 0 = lowest on record.'}
+                    'set = last hour minus 7-day median (wind setdown or seiche), feet. 0 = lowest on record.'}
     os.makedirs(OUT, exist_ok=True)
     json.dump(res, open(os.path.join(OUT, 'lowwater.json'), 'w'), separators=(',', ':'))
     json.dump(stats, open(sp, 'w'), separators=(',', ':'))
