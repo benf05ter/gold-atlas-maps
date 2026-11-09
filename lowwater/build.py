@@ -334,7 +334,8 @@ def main():
                     'v': round(q, 1), 'u': 'cfs', 'd': r.get('qd'), 'pct': r1(pct), 'b': band(pct),
                     'q': [row[2], row[4], row[6]], 'rec': [row[0], row[-1]], 'yrs': st.get('years'),
                     'gh': r1(r.get('gh'), 2), 'dv': dv[-1][0] if dv else None,
-                    'mx': mx[1] if mx else None, 'mxd': mx[0] if mx else None})
+                    'mx': mx[1] if mx else None, 'mxd': mx[0] if mx else None,
+                    **({'note': meta[s][3]} if len(meta[s]) > 3 else {})})
 
     # lakes
     for stn, lake in sites['lakes']:

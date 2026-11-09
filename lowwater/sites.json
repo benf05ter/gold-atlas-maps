@@ -1,10 +1,10 @@
 {
-  "_note": "Gauges the low-water job reads. rivers = USGS stream gauges (discharge, cfs); lakes = NOAA CO-OPS Great Lakes water-level stations. A gauge that returns no data is skipped and listed under 'missing' in lowwater.json.",
+  "_note": "Optional 4th field on a river = a note shown on its card (dams, regulated flow). Gauges the low-water job reads. rivers = USGS stream gauges (discharge, cfs); lakes = NOAA CO-OPS Great Lakes water-level stations. A gauge that returns no data is skipped and listed under 'missing' in lowwater.json.",
   "rivers": [
     ["05331000", "Mississippi", "MN"], ["05344500", "Mississippi", "WI"], ["05378500", "Mississippi", "MN"],
     ["05389500", "Mississippi", "IA"], ["05420500", "Mississippi", "IA"],
     ["05227500", "Mississippi", "MN"], ["05340500", "St. Croix", "WI"], ["05341550", "St. Croix", "MN"],
-    ["05365500", "Chippewa", "WI"], ["05369500", "Chippewa", "WI"], ["05356000", "Chippewa", "WI"],
+    ["05365500", "Chippewa", "WI"], ["05369500", "Chippewa", "WI"], ["05356000", "Chippewa", "WI", "Just below the Chippewa Flowage dam at Winter, so flow here is set by dam releases. Low here means the dam is holding water back; the bars downstream are out, but the flowage itself may be full."],
     ["05369000", "Red Cedar", "WI"], ["05362000", "Jump", "WI"], ["05360500", "Flambeau", "WI"],
     ["05367500", "Red Cedar", "WI"], ["05381000", "Black", "WI"], ["05382000", "Black", "WI"],
     ["05404000", "Wisconsin", "WI"], ["05407000", "Wisconsin", "WI"], ["05398000", "Wisconsin", "WI"],
