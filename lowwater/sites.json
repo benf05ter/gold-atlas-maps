@@ -1,0 +1,29 @@
+{
+  "_note": "Optional 4th field on a river = a note shown on its card (dams, regulated flow). Gauges the low-water job reads. rivers = USGS stream gauges (discharge, cfs); lakes = NOAA CO-OPS Great Lakes water-level stations. A gauge that returns no data is skipped and listed under 'missing' in lowwater.json.",
+  "rivers": [
+    ["05331000", "Mississippi", "MN"], ["05344500", "Mississippi", "WI"], ["05378500", "Mississippi", "MN"],
+    ["05389500", "Mississippi", "IA"], ["05420500", "Mississippi", "IA"],
+    ["05227500", "Mississippi", "MN"], ["05340500", "St. Croix", "WI"], ["05341550", "St. Croix", "MN"],
+    ["05365500", "Chippewa", "WI"], ["05369500", "Chippewa", "WI"], ["05356000", "Chippewa", "WI", "Just below the Chippewa Flowage dam at Winter, so flow here is set by dam releases. Low here means the dam is holding water back; the bars downstream are out, but the flowage itself may be full."],
+    ["05369000", "Red Cedar", "WI"], ["05362000", "Jump", "WI"], ["05360500", "Flambeau", "WI"],
+    ["05367500", "Red Cedar", "WI"], ["05381000", "Black", "WI"], ["05382000", "Black", "WI"],
+    ["05404000", "Wisconsin", "WI"], ["05407000", "Wisconsin", "WI"], ["05398000", "Wisconsin", "WI"],
+    ["05410490", "Kickapoo", "WI"], ["05430500", "Rock", "WI"], ["05446500", "Rock", "IL"],
+    ["040851385", "Fox", "WI"], ["04079000", "Wolf", "WI"], ["04067500", "Menominee", "WI"],
+    ["04027000", "Bad", "WI"], ["05330000", "Minnesota", "MN"], ["05325000", "Minnesota", "MN"],
+    ["05286000", "Rum", "MN"], ["05385000", "Root", "MN"], ["05374900", "Zumbro", "MN"],
+    ["05355200", "Cannon", "MN"], ["04024000", "St. Louis", "MN"], ["05412500", "Turkey", "IA"],
+    ["05388250", "Upper Iowa", "IA"], ["05464500", "Cedar", "IA"], ["05465500", "Iowa", "IA"],
+    ["05420680", "Wapsipinicon", "IA"], ["05418500", "Maquoketa", "IA"], ["05543500", "Illinois", "IL"],
+    ["05437500", "Rock", "IL"], ["04119000", "Grand", "MI"], ["04121970", "Muskegon", "MI"],
+    ["04126970", "Boardman", "MI"], ["04040000", "Ontonagon", "MI"], ["04059500", "Ford", "MI"],
+    ["04045500", "Tahquamenon", "MI"], ["04066003", "Menominee", "MI"]
+  ],
+  "lakes": [
+    ["9099064", "Superior"], ["9099090", "Superior"], ["9099004", "Superior"], ["9099018", "Superior"],
+    ["9099044", "Superior"], ["9087057", "Michigan"], ["9087079", "Michigan"], ["9087088", "Michigan"],
+    ["9087068", "Michigan"], ["9087072", "Michigan"], ["9087096", "Michigan"], ["9087044", "Michigan"],
+    ["9087031", "Michigan"], ["9087023", "Michigan"], ["9075080", "Huron"], ["9075065", "Huron"],
+    ["9075035", "Huron"], ["9075014", "Huron"]
+  ]
+}
