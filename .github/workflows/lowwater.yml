@@ -1,0 +1,45 @@
+name: Low water
+# Every 3 hours: read USGS river gauges and NOAA Great Lakes stations, score how low each one is for the date,
+# and publish lowwater.json on the lowwater-data branch (one commit, force-pushed, so the repo never grows).
+# The atlas reads https://raw.githubusercontent.com/benf05ter/gold-atlas-maps/lowwater-data/lowwater.json
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+  push:
+    branches: [claude/project-thread-q49cdp]
+    paths: ['lowwater/**', '.github/workflows/lowwater.yml']
+permissions:
+  contents: write
+concurrency:
+  group: lowwater
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: lowwater
+          filter: blob:none
+      - name: Previous data
+        run: |
+          mkdir -p data
+          if git fetch --depth=1 origin lowwater-data; then
+            for f in lowwater.json stats.json; do git show FETCH_HEAD:$f > data/$f 2>/dev/null || rm -f data/$f; done
+          fi
+          ls -la data
+      - name: Build
+        run: python3 lowwater/build.py data
+      - name: Publish
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          cd data
+          git init -q -b lowwater-data
+          git config user.name 'low-water bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add lowwater.json stats.json log.txt
+          git commit -q -m "low water $(date -u +%FT%RZ)"
+          git push -q --force "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}" lowwater-data
